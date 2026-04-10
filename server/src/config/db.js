@@ -11,11 +11,21 @@ const toDirectNeonHost = (value) => {
 
 const connectionString = process.env.DATABASE_URL_DIRECT || toDirectNeonHost(process.env.DATABASE_URL)
 
-const pool = new Pool({
-  connectionString,
-  ssl: connectionString ? { rejectUnauthorized: false } : false,
-  connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT_MS || 15000),
-  query_timeout: Number(process.env.PG_QUERY_TIMEOUT_MS || 30000),
-})
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+const poolMax = Number(process.env.PG_POOL_MAX || (isServerless ? 1 : 10))
 
-module.exports = pool
+const globalForPool = globalThis
+
+if (!globalForPool.__resultCheckerPool) {
+  globalForPool.__resultCheckerPool = new Pool({
+    connectionString,
+    ssl: connectionString ? { rejectUnauthorized: false } : false,
+    max: poolMax,
+    idleTimeoutMillis: isServerless ? 1000 : 10000,
+    connectionTimeoutMillis: Number(process.env.PG_CONNECTION_TIMEOUT_MS || 15000),
+    query_timeout: Number(process.env.PG_QUERY_TIMEOUT_MS || 30000),
+    allowExitOnIdle: true,
+  })
+}
+
+module.exports = globalForPool.__resultCheckerPool

@@ -59,3 +59,4 @@ What is already configured:
 Serverless runtime notes:
 - Avoid very large CSV uploads; this project enforces a 4MB upload cap per request for compatibility with Vercel limits.
 - Database schema/migrations are not run automatically during deployment. Run `npm run db:init --prefix server` when needed.
+- The backend runs as a Vercel serverless function through [server/api/index.js](server/api/index.js) and uses a small reused Postgres pool in [server/src/config/db.js](server/src/config/db.js).
