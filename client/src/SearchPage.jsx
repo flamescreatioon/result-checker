@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { apiUrl } from './api'
 
 function SearchPage() {
   const [regNo, setRegNo] = useState('')
@@ -18,7 +19,7 @@ function SearchPage() {
     setError('')
 
     try {
-      const response = await fetch(`/api/results/${encodeURIComponent(regNo.trim())}`)
+      const response = await fetch(apiUrl(`/api/results/${encodeURIComponent(regNo.trim())}`))
       const payload = await response.json()
 
       if (!response.ok) {

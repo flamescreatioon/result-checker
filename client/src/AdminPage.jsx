@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { apiUrl } from './api'
 
 function AdminPage() {
   const [file, setFile] = useState(null)
@@ -60,7 +61,7 @@ function AdminPage() {
         'x-admin-password': adminPassword
       }
 
-      const response = await fetch('/api/admin/upload-csv', {
+      const response = await fetch(apiUrl('/api/admin/upload-csv'), {
         method: 'POST',
         body: formData,
         headers,
