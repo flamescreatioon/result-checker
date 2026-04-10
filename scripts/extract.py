@@ -533,7 +533,7 @@ def process_folder(
     max_pages: int | None = None,
     use_openrouter: bool = False,
     openrouter_model: str = "google/gemma-4-31b-it:free",
-    openrouter_api_key: str = "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",
+    openrouter_api_key: str = "",
 ):
     """Process all PDFs and image files in a folder and write combined results."""
     input_dir = Path(folder)
