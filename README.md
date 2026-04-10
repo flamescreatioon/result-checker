@@ -13,13 +13,13 @@ Simple platform for students to check:
 ## Setup
 1. Install dependencies from project root:
    - `npm install`
-2. Configure database URL in `server/.env`:
-   - `DATABASE_URL=postgresql://...`
-3. Initialize DB table:
+2. Copy `server/.env.example` to `server/.env` and fill in the values.
+3. If you are deploying the frontend separately, copy `client/.env.example` to `client/.env` and set the API URL.
+4. Initialize DB table:
    - `npm run db:init`
-4. Import CSV data from `json/*.csv`:
+5. Import CSV data from `json/*.csv`:
    - `npm run import:data`
-5. Start frontend + backend together:
+6. Start frontend + backend together:
    - `npm run dev`
 
 ## API
@@ -30,6 +30,10 @@ Simple platform for students to check:
 Admin auth:
 - Set `ADMIN_PASSWORD_HASH` in `server/.env`
 - Send header `x-admin-password: <plain_password>` when calling admin route
+
+Frontend API config:
+- Set `VITE_API_BASE_URL` in `client/.env` for production deployments
+- Local development can keep using the Vite proxy in `client/vite.config.js`
 
 Example:
 - `GET /api/results/CME%2F20%2F109001`
