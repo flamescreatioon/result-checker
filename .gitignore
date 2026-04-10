@@ -28,6 +28,15 @@ server/.env.*
 # Runtime uploads and temp data
 server/uploads/
 
+# Sensitive result data and extracted artifacts
+json/*.csv
+scripts/results.csv
+scripts/pdfs/*.pdf
+scripts/pdfs/*.txt
+scripts/pdfs/debug_ocr/
+scripts/pdfs/images/
+scripts/pdfs/test_images/
+
 # Editor and OS files
 .vscode/
 .idea/
