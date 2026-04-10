@@ -26,8 +26,16 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-app.options('*', cors(corsOptions))
 app.use(express.json())
+
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204)
+  }
+
+  return next()
+})
+
 app.use('/api', resultRoutes)
 app.use('/api/admin', adminRoutes)
 
