@@ -21,7 +21,10 @@ router.get('/health', async (req, res) => {
       })
     }
 
-    await pool.query('SELECT 1')
+    await Promise.race([
+      pool.query('SELECT 1'),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Health check timed out')), 4000)),
+    ])
     return res.json({ ok: true, api: 'up', dbConfigured: true, dbReachable: true })
   } catch (error) {
     return res.status(500).json({ ok: false, api: 'up', dbConfigured: true, dbReachable: false, message: 'Database connection failed' })
@@ -34,7 +37,7 @@ router.get('/results/:regNo', async (req, res) => {
       return res.status(500).json({ message: 'DATABASE_URL is not configured' })
     }
 
-    const regNo = req.params.regNo.trim().toUpperCase()
+    const regNo = String(req.params.regNo || '').trim().toUpperCase()
 
     if (!regNo) {
       return res.status(400).json({ message: 'Registration number is required' })
@@ -60,7 +63,7 @@ router.get('/results/:regNo', async (req, res) => {
       FROM semester_results sem
       JOIN students s ON s.id = sem.student_id
       JOIN result_sheets rs ON rs.id = sem.result_sheet_id
-      WHERE UPPER(s.reg_no) = $1
+      WHERE s.reg_no = $1
     `
 
     const { rows } = await pool.query(query, [regNo])
