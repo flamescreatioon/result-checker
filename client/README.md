@@ -7,6 +7,14 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
+## API Configuration
+
+For local development, the app uses the Vite proxy defined in [vite.config.js](vite.config.js). For production on Vercel, set:
+
+- `VITE_API_BASE_URL=https://your-backend-project.vercel.app`
+
+The frontend uses this value through [src/api.js](src/api.js) so all `/api` requests point to the deployed backend.
+
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
