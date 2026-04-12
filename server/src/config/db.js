@@ -11,6 +11,11 @@ const toDirectNeonHost = (value) => {
 
 const connectionString = process.env.DATABASE_URL_DIRECT || toDirectNeonHost(process.env.DATABASE_URL)
 
+if (!connectionString || !connectionString.trim()) {
+  const errorMsg = 'DATABASE_URL or DATABASE_URL_DIRECT is not configured. Set one in your Vercel environment variables.'
+  console.error(`[db.js] ${errorMsg}`)
+}
+
 const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
 const poolMax = Number(process.env.PG_POOL_MAX || (isServerless ? 1 : 10))
 
