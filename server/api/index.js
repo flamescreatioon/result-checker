@@ -4,4 +4,6 @@ const app = require('../src/app')
 
 dotenv.config()
 
-module.exports = serverless(app)
+module.exports = serverless(app, {
+	callbackWaitsForEmptyEventLoop: false,
+})
