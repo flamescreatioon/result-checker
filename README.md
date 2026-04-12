@@ -38,25 +38,71 @@ Frontend API config:
 Example:
 - `GET /api/results/CME%2F20%2F109001`
 
-## Vercel Backend Deployment (Serverless)
-Backend is prepared for Vercel serverless functions under `server/`.
+## Vercel Deployment (Single Project)
 
-1. Push repo to GitHub.
-2. In Vercel, import the repository and set Root Directory to `server`.
-3. Framework preset can be left as `Other`.
-4. Add these environment variables in Vercel Project Settings:
-   - `DATABASE_URL`
-   - `DATABASE_URL_DIRECT` (optional but recommended for Neon direct host)
-   - `ADMIN_PASSWORD_HASH`
-5. Deploy.
+This repository is configured for a single Vercel deployment that serves:
+- Frontend static app from `client/dist`
+- Backend API from `server/api/index.js`
 
-What is already configured:
-- Serverless entrypoint: `server/api/index.js`
-- Vercel function config: `server/vercel.json`
-- Express app mounted for serverless runtime: `server/src/app.js`
-- CSV admin upload uses in-memory parsing (no local disk dependency), so it works in serverless environments.
+### 1. Before Deploying
 
-Serverless runtime notes:
-- Avoid very large CSV uploads; this project enforces a 4MB upload cap per request for compatibility with Vercel limits.
-- Database schema/migrations are not run automatically during deployment. Run `npm run db:init --prefix server` when needed.
-- The backend runs as a Vercel serverless function through [server/api/index.js](server/api/index.js) and uses a small reused Postgres pool in [server/src/config/db.js](server/src/config/db.js).
+1. Push this repo to GitHub.
+2. Ensure `vercel.json` exists at the repo root.
+3. Ensure root scripts in `package.json` include `build` and `start`.
+
+### 2. Vercel Project Settings
+
+In Vercel, import the repository and set:
+
+1. Root Directory: repository root (do not set to `server` or `client`)
+2. Framework Preset: Other
+3. Build Command: `npm run build`
+4. Output Directory: `client/dist`
+5. Install Command: `npm install`
+
+### 3. Required Environment Variables (Vercel)
+
+Set these in Vercel Project Settings -> Environment Variables:
+
+- `DATABASE_URL` or `DATABASE_URL_DIRECT`
+- `ADMIN_PASSWORD_HASH`
+- `FRONTEND_ORIGIN` (set to your final deployed app URL)
+
+Optional:
+
+- `FRONTEND_ORIGINS` (comma-separated list for multiple domains)
+- `PG_CONNECTION_TIMEOUT_MS`
+- `PG_QUERY_TIMEOUT_MS`
+- `PG_POOL_MAX` (recommended `1` on serverless)
+
+### 4. Routing/Runtime Behavior
+
+Configured in root `vercel.json`:
+
+- `/api/*` rewrites to `server/api/index.js`
+- All other routes rewrite to `/index.html` (SPA fallback)
+
+Backend serverless notes:
+
+- API handler is in `server/api/index.js`
+- Shared Express app is in `server/src/app.js`
+- DB pool is serverless-optimized in `server/src/config/db.js`
+- CSV upload is memory-based and works in serverless environments
+
+### 5. Post-Deploy Checks
+
+Run these checks on your deployed domain:
+
+1. `GET /` should load the React app
+2. `GET /api/health` should respond quickly
+3. `GET /api/results/<REG_NO>` should return result data
+
+### 6. Data Initialization
+
+Database schema and imports are not run automatically by Vercel deploy.
+Run from your local machine when needed:
+
+- `npm run db:init`
+- `npm run import:data`
+
+These commands use the server scripts under `server/`.
