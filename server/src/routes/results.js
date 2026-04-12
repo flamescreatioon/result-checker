@@ -12,29 +12,31 @@ const sortSemester = (value) => {
 
 router.get('/health', async (req, res) => {
   try {
-    if (!process.env.DATABASE_URL) {
-      return res.json({
-        ok: true,
+    const hasDbUrl = process.env.DATABASE_URL || process.env.DATABASE_URL_DIRECT
+    if (!hasDbUrl) {
+      return res.status(503).json({
+        ok: false,
         api: 'up',
         dbConfigured: false,
-        message: 'DATABASE_URL is not configured',
+        message: 'DATABASE_URL or DATABASE_URL_DIRECT is not configured in Vercel environment variables',
       })
     }
 
     await Promise.race([
       pool.query('SELECT 1'),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Health check timed out')), 4000)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Health check timed out after 4 seconds')), 4000)),
     ])
     return res.json({ ok: true, api: 'up', dbConfigured: true, dbReachable: true })
   } catch (error) {
-    return res.status(500).json({ ok: false, api: 'up', dbConfigured: true, dbReachable: false, message: 'Database connection failed' })
+    return res.status(500).json({ ok: false, api: 'up', dbConfigured: true, dbReachable: false, message: error.message || 'Database connection failed' })
   }
 })
 
 router.get('/results/:regNo', async (req, res) => {
   try {
-    if (!process.env.DATABASE_URL) {
-      return res.status(500).json({ message: 'DATABASE_URL is not configured' })
+    const hasDbUrl = process.env.DATABASE_URL || process.env.DATABASE_URL_DIRECT
+    if (!hasDbUrl) {
+      return res.status(503).json({ message: 'DATABASE_URL or DATABASE_URL_DIRECT is not configured in Vercel environment variables' })
     }
 
     const regNo = String(req.params.regNo || '').trim().toUpperCase()
