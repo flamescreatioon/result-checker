@@ -14,7 +14,7 @@ Simple platform for students to check:
 1. Install dependencies from project root:
    - `npm install`
 2. Copy `server/.env.example` to `server/.env` and fill in the values.
-3. If you are deploying the frontend separately, copy `client/.env.example` to `client/.env` and set the API URL.
+3. For local frontend overrides, copy `client/.env.example` to `client/.env` only if you want to change the API base URL.
 4. Initialize DB table:
    - `npm run db:init`
 5. Import CSV data from `json/*.csv`:
@@ -32,7 +32,8 @@ Admin auth:
 - Send header `x-admin-password: <plain_password>` when calling admin route
 
 Frontend API config:
-- Set `VITE_API_BASE_URL` in `client/.env` for production deployments
+- For this single-project Vercel deployment, leave `VITE_API_BASE_URL` unset and use relative `/api/...` calls
+- Only set `VITE_API_BASE_URL` if you later split frontend and backend into separate domains
 - Local development can keep using the Vite proxy in `client/vite.config.js`
 
 Example:
@@ -42,7 +43,7 @@ Example:
 
 This repository is configured for a single Vercel deployment that serves:
 - Frontend static app from `client/dist`
-- Backend API from `server/api/index.js`
+- Backend API from `api/index.js`
 
 ### 1. Before Deploying
 
@@ -79,12 +80,12 @@ Optional:
 
 Configured in root `vercel.json`:
 
-- `/api/*` rewrites to `server/api/index.js`
+- `/api/*` rewrites to `api/index.js`
 - All other routes rewrite to `/index.html` (SPA fallback)
 
 Backend serverless notes:
 
-- API handler is in `server/api/index.js`
+- API handler is in `api/index.js`
 - Shared Express app is in `server/src/app.js`
 - DB pool is serverless-optimized in `server/src/config/db.js`
 - CSV upload is memory-based and works in serverless environments
