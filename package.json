@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npm run dev --prefix server",
-    "build": "npm install --prefix server; npm install --prefix client; npm run build --prefix client",
+    "build": "npm install --prefix client && npm run build --prefix client",
     "start": "npm run start --prefix server",
     "db:init": "npm run db:init --prefix server",
     "import:data": "npm run import:csv --prefix server",
@@ -19,5 +19,15 @@
   "type": "commonjs",
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "pg": "^8.20.0",
+    "serverless-http": "^4.0.0"
   }
 }
