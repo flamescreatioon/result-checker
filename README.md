@@ -17,7 +17,8 @@ Simple platform for students to check:
 3. For local frontend overrides, copy `client/.env.example` to `client/.env` only if you want to change the API base URL.
 4. Initialize DB table:
    - `npm run db:init`
-5. Import CSV data from `json/*.csv`:
+5. Place the private CSV export files in `json/` (they are intentionally
+   excluded from Git), then import them:
    - `npm run import:data`
 6. Start frontend + backend together:
    - `npm run dev`
@@ -101,9 +102,18 @@ Run these checks on your deployed domain:
 ### 6. Data Initialization
 
 Database schema and imports are not run automatically by Vercel deploy.
-Run from your local machine when needed:
+Store result exports outside the repository or in the ignored `json/` folder,
+then run from a trusted local machine or CI environment with the required
+database credentials:
 
 - `npm run db:init`
 - `npm run import:data`
 
 These commands use the server scripts under `server/`.
+
+## Repository Safety
+
+Student result data, uploaded files, OCR artifacts, and local environment
+files are excluded through `.gitignore`. Do not commit these files or database
+credentials to GitHub. Add only anonymized fixtures if example data is needed
+for development or documentation.
