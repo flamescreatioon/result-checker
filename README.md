@@ -117,3 +117,9 @@ Student result data, uploaded files, OCR artifacts, and local environment
 files are excluded through `.gitignore`. Do not commit these files or database
 credentials to GitHub. Add only anonymized fixtures if example data is needed
 for development or documentation.
+
+## Contributing and Releases
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Releases
+use Semantic Versioning and Git tags; the full process is in
+[docs/VERSIONING.md](docs/VERSIONING.md).

@@ -1,7 +1,7 @@
 {
   "name": "result-checker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Student result-checking platform built with React, Express, and PostgreSQL.",
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
@@ -11,11 +11,28 @@
     "start": "npm run start --prefix server",
     "db:init": "npm run db:init --prefix server",
     "import:data": "npm run import:csv --prefix server",
-    "test": "echo \"No root tests configured\""
+    "test": "echo \"No root tests configured\"",
+    "version:check": "node scripts/check-version.js",
+    "release:patch": "npm version patch -m \"chore(release): v%s\"",
+    "release:minor": "npm version minor -m \"chore(release): v%s\"",
+    "release:major": "npm version major -m \"chore(release): v%s\""
   },
-  "keywords": [],
+  "keywords": [
+    "student-results",
+    "react",
+    "express",
+    "postgresql"
+  ],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flamescreatioon/result-checker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flamescreatioon/result-checker/issues"
+  },
+  "homepage": "https://github.com/flamescreatioon/result-checker#readme",
   "type": "commonjs",
   "devDependencies": {
     "concurrently": "^9.2.1"
